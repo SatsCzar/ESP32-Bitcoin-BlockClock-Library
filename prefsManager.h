@@ -9,11 +9,12 @@
 #include <Arduino.h>
 #endif
 
+#include "WiFiManager.h"
 #include "blockClockTypes.h"
 #include "blockClockUtils.h"
 
 void wipeWiFiData();
-String getPrefsSsidPasswd(String ssidPasswd);
+SsidPasswd getPrefsSsidPasswd();
 void saveWiFiDataInStorage(String ssid, String password);
 bool dontHaveWiFiDataInPrefs();
 PriceData getBitcoinDataInPrefs(CurrencyState currency);

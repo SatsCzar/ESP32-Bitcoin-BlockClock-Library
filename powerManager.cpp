@@ -20,7 +20,9 @@ const float BATTERY_MAX_VOLTAGE = 4.1;
 
 void setWiFiMaxPowerSave() { esp_wifi_set_ps(WIFI_PS_MAX_MODEM); }
 
-void setCpuMaxPowerSave() { setCpuFrequencyMhz(80); }
+void setCpuNormalClock() { setCpuFrequencyMhz(80); }
+
+void setCpuMaxPowerSave() { setCpuFrequencyMhz(40); }
 
 #ifdef M5STACK
 bool isCharging() {

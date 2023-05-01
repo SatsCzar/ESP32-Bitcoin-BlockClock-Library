@@ -33,8 +33,6 @@ RecommendedFees ApiClient::getRecommendedFees() {
     StaticJsonDocument<192> httpResponseJson;
     String httpResponseBody = http.getString();
 
-    Serial.println(httpResponseBody);
-
     deserializeJson(httpResponseJson, httpResponseBody);
 
     recommendedFees.high = httpResponseJson["fastestFee"];

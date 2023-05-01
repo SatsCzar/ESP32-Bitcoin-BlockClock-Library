@@ -1,6 +1,4 @@
 #include "userBoardDefines.h"
-
-#include "userBoardDefines.h"
 #ifdef M5STACK
 #include <M5StickCPlus.h>
 #endif
@@ -151,7 +149,7 @@ void drawnWiFiDataScreen(WiFiData wifiData) {
 }
 
 void printBattery(int batteryLevel) {
-  void clearBatterySprite();
+  clearBatterySprite();
   if (batteryLevel == 100) {
     drawString("100%", 185, 115, 2);
     return;

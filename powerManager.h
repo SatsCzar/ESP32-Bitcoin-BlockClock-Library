@@ -9,6 +9,7 @@
 #include <Arduino.h>
 #endif
 
+void setCpuNormalClock();
 void setWiFiMaxPowerSave();
 void setCpuMaxPowerSave();
 

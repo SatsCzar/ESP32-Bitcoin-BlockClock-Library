@@ -1,5 +1,6 @@
 #include "prefsManager.h"
 
+#include "WiFiManager.h"
 #include "userBoardDefines.h"
 #ifdef M5STACK
 #include <M5StickCPlus.h>
@@ -21,22 +22,16 @@ void wipeWiFiData() {
   preferences.end();
 }
 
-String getPrefsSsidPasswd(String ssidPasswd) {
-  ssidPasswd.toUpperCase();
+SsidPasswd getPrefsSsidPasswd() {
+  SsidPasswd ssidPasswd;
   preferences.begin("wifi");
 
-  String value;
-
-  if (ssidPasswd == "SSID") {
-    value = preferences.getString("ssid", "none");
-  }
-  if (ssidPasswd == "PASS") {
-    value = preferences.getString("password", "none");
-  }
+  ssidPasswd.ssid = preferences.getString("ssid", "none");
+  ssidPasswd.passwd = preferences.getString("password", "none");
 
   preferences.end();
 
-  return value;
+  return ssidPasswd;
 }
 
 void saveWiFiDataInStorage(String ssid, String password) {
@@ -47,9 +42,9 @@ void saveWiFiDataInStorage(String ssid, String password) {
 }
 
 bool dontHaveWiFiDataInPrefs() {
-  String ssid = getPrefsSsidPasswd("ssid");
+  SsidPasswd SsidPasswd = getPrefsSsidPasswd();
 
-  if (ssid != "none") {
+  if (SsidPasswd.ssid != "none") {
     return false;
   }
 

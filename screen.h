@@ -27,6 +27,7 @@ void printChange(String time, float change, int16_t x, int16_t y);
 void printFee(String text, uint16_t fee, int16_t x, int16_t y);
 void drawnWiFiDataScreen(WiFiData wifiData);
 void printBattery(int batteryLevel);
+void clearBatterySprite();
 void clearBatteryScreen();
 void clearScreenExceptBattery();
 void setBitcoinTextColor(float delta);

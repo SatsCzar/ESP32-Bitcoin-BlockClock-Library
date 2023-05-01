@@ -30,14 +30,13 @@ void initWiFi() {
     ESP.restart();
   }
 
-  String ssid = getPrefsSsidPasswd("ssid");
-  String password = getPrefsSsidPasswd("pass");
+  SsidPasswd ssidPasswd = getPrefsSsidPasswd();
 
-  drawStringPush("Connecting to: " + truncateString(ssid), 10, 50, 1);
+  drawStringPush("Connecting to: " + truncateString(ssidPasswd.ssid), 10, 50, 1);
   drawStringPush("Please Stand By", 10, 60, 1);
 
   WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid.c_str(), password.c_str());
+  WiFi.begin(ssidPasswd.ssid.c_str(), ssidPasswd.passwd.c_str());
 
   int count = 0;
 
@@ -49,7 +48,7 @@ void initWiFi() {
   clearHalfScreen();
 
   if (connectionFailed(WiFi.status())) {
-    drawStringPush("Failed to connect to: " + truncateString(ssid), 10, 60, 1);
+    drawStringPush("Failed to connect to: " + truncateString(ssidPasswd.ssid), 10, 60, 1);
     drawStringPush("Press main button to wipe WiFi data", 10, 70, 1);
     drawStringPush("Or press other button to restart", 10, 80, 1);
 
@@ -80,7 +79,7 @@ void initWiFi() {
     }
   }
 
-  drawStringPush("Successfuly connected to: " + truncateString(ssid), 10, 60,
+  drawStringPush("Successfuly connected to: " + truncateString(ssidPasswd.ssid), 10, 60,
                  1);
 
   setWiFiMaxPowerSave();
@@ -164,11 +163,8 @@ WiFiData getWiFiData() {
     Serial.println(esp_err_to_name(err));
   }
 
-  Serial.println("1");
   wifiData.connected = isWiFiConnected();
-  Serial.println("2");
   wifiData.SignalStrength = wifiApInformation.rssi;
-  Serial.println("3");
   wifiData.SSID = String(reinterpret_cast<char*>(wifiApInformation.ssid));
 
   return wifiData;

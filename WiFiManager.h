@@ -13,6 +13,11 @@
 #include "blockClockTypes.h"
 #include "esp_wifi.h"
 
+struct SsidPasswd {
+  String ssid;
+  String passwd;
+};
+
 void initWiFi();
 void initWiFiSmartConfig();
 bool waitingWiFiConnection(wl_status_t status, int count);
