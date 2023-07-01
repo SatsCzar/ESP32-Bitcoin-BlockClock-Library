@@ -12,10 +12,9 @@
 #include "blockClockUtils.h"
 #include "screen.h"
 
-TFT_eSPI *lcd;
-TFT_eSprite *sprite;
+Screen::Screen() { initScreen(); }
 
-void initScreen() {
+void Screen::initScreen() {
 #ifdef M5STACK
   lcd = &M5.Lcd;
 
@@ -46,24 +45,24 @@ void initScreen() {
 #endif
 }
 
-void drawStringPush(String value, int32_t x, int32_t y, uint8_t size) {
+void Screen::drawStringPush(String value, int32_t x, int32_t y, uint8_t size) {
   drawString(value, x, y, size);
   sprite->pushSprite(0, 0);
 }
 
-void drawString(String value, int32_t x, int32_t y, uint8_t size) {
+void Screen::drawString(String value, int32_t x, int32_t y, uint8_t size) {
   sprite->setTextSize(size);
   sprite->drawString(value, x, y, 1);
 }
 
-void drawBlockHeightScreen(String blockHeight) {
+void Screen::drawBlockHeightScreen(String blockHeight) {
   clearSpriteExceptBattery();
   drawString("Block Height:", 5, 10, 3);
   drawString(blockHeight, 60, 80, 3);
   sprite->pushSprite(0, 0);
 }
 
-void drawRecommendedFeesScreen(RecommendedFees recommendedFees) {
+void Screen::drawRecommendedFeesScreen(RecommendedFees recommendedFees) {
   clearSpriteExceptBattery();
   drawString("Recommended Fees:", 5, 10, 2);
 
@@ -77,7 +76,7 @@ void drawRecommendedFeesScreen(RecommendedFees recommendedFees) {
   sprite->pushSprite(0, 0);
 }
 
-void drawnPriceScreen(PriceData priceData) {
+void Screen::drawnPriceScreen(PriceData priceData) {
   clearSpriteExceptBattery();
   String symbol = currencyStateToSymbol(priceData.currency);
 
@@ -91,7 +90,7 @@ void drawnPriceScreen(PriceData priceData) {
   sprite->pushSprite(0, 0);
 }
 
-void drawnChangeScreen(PriceData priceData) {
+void Screen::drawnChangeScreen(PriceData priceData) {
   clearSpriteExceptBattery();
   String symbol = currencyStateToString(priceData.currency);
   String change1h = String(priceData.change1h);
@@ -106,7 +105,7 @@ void drawnChangeScreen(PriceData priceData) {
   sprite->pushSprite(0, 0);
 }
 
-void printChange(String time, float change, int16_t x, int16_t y) {
+void Screen::printChange(String time, float change, int16_t x, int16_t y) {
   String changeString = String(change);
 
   drawString(time + ": ", x, y, 2);
@@ -115,14 +114,15 @@ void printChange(String time, float change, int16_t x, int16_t y) {
   resetTextColor();
 }
 
-void printFee(String text, uint16_t fee, int16_t x, int16_t y) {
+void Screen::printFee(String text, uint16_t fee, int16_t x, int16_t y) {
   String feeString = String(fee);
 
   drawString(text + ": ", x, y, 2);
-  drawString(feeString + " sat/vB", x + 90, y, 2);
+  drawString(feeString + " sat/vB", x + 100, y, 2);
 }
 
-void drawnDateAndTimeScreen(String hours, String minutes, String ddmmyyyy) {
+void Screen::drawnDateAndTimeScreen(String hours, String minutes,
+                                    String ddmmyyyy) {
   clearSpriteExceptBattery();
   String hoursAndMinutes = hours + ":" + minutes;
 
@@ -131,7 +131,7 @@ void drawnDateAndTimeScreen(String hours, String minutes, String ddmmyyyy) {
   sprite->pushSprite(0, 0);
 }
 
-void drawnWiFiDataScreen(WiFiData wifiData) {
+void Screen::drawnWiFiDataScreen(WiFiData wifiData) {
   clearSpriteExceptBattery();
   String isConnected;
 
@@ -148,7 +148,7 @@ void drawnWiFiDataScreen(WiFiData wifiData) {
   sprite->pushSprite(0, 0);
 }
 
-void printBattery(int batteryLevel) {
+void Screen::printBattery(int batteryLevel) {
   clearBatterySprite();
   if (batteryLevel == 100) {
     drawString("100%", 185, 115, 2);
@@ -159,13 +159,19 @@ void printBattery(int batteryLevel) {
   sprite->pushSprite(0, 0);
 }
 
-void clearBatteryScreen() { lcd->fillRect(185, 115, 240, 135, TFT_BLACK); }
+void Screen::clearBatteryScreen() {
+  lcd->fillRect(185, 115, 240, 135, TFT_BLACK);
+}
 
-void clearBatterySprite() { sprite->fillRect(185, 115, 240, 135, TFT_BLACK); }
+void Screen::clearBatterySprite() {
+  sprite->fillRect(185, 115, 240, 135, TFT_BLACK);
+}
 
-void clearScreen() { lcd->fillRect(0, 0, 240, 135, TFT_BLACK); }
+void Screen::clearScreen() { lcd->fillScreen(TFT_BLACK); }
 
-void setBitcoinTextColor(float delta) {
+void Screen::clearSprite() { sprite->fillSprite(TFT_BLACK); }
+
+void Screen::setBitcoinTextColor(float delta) {
   if (delta > 0) {
     sprite->setTextColor(TFT_GREEN);
     return;
@@ -177,16 +183,20 @@ void setBitcoinTextColor(float delta) {
   sprite->setTextColor(TFT_WHITE);
 }
 
-void resetTextColor() { sprite->setTextColor(TFT_WHITE); }
+void Screen::resetTextColor() { sprite->setTextColor(TFT_WHITE); }
 
-void clearScreenExceptBattery() {
+void Screen::clearScreenExceptBattery() {
   lcd->fillRect(0, 0, 240, 112, TFT_BLACK);
   lcd->fillRect(0, 0, 183, 135, TFT_BLACK);
 }
 
-void clearSpriteExceptBattery() {
+void Screen::clearSpriteExceptBattery() {
+#ifdef M5STACK
   sprite->fillRect(0, 0, 240, 112, TFT_BLACK);
   sprite->fillRect(0, 0, 183, 135, TFT_BLACK);
+  return;
+#endif
+  clearSprite();
 }
 
-void clearHalfScreen() { sprite->fillRect(0, 60, 240, 135, TFT_BLACK); }
+void Screen::clearHalfScreen() { sprite->fillRect(0, 60, 240, 135, TFT_BLACK); }
