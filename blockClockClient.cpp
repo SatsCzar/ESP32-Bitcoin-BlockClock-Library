@@ -72,11 +72,16 @@ PriceData ApiClient::getBitcoinPrice(CurrencyState currencyState) {
     String httpResponseBody = http.getString();
     deserializeJson(doc, httpResponseBody);
 
+    String delta1h = replaceCommaWithDot(doc["delta_1h"]);
+    String delta24h = replaceCommaWithDot(doc["delta_24h"]);
+    String delta7d = replaceCommaWithDot(doc["delta_7d"]);
+    String delta30d = replaceCommaWithDot(doc["delta_30d"]);
+
     priceData.price = intWithThousandSeparator((int)doc["price"]);
-    priceData.change1h = (float)doc["delta_1h"];
-    priceData.change24h = (float)doc["delta_24h"];
-    priceData.change7d = (float)doc["delta_7d"];
-    priceData.change30d = (float)doc["delta_30d"];
+    priceData.change1h = delta1h.toFloat();
+    priceData.change24h = delta24h.toFloat();
+    priceData.change7d = delta7d.toFloat();
+    priceData.change30d = delta30d.toFloat();
     priceData.timestamp = getTimestampFromRTC();
     priceData.error = false;
 

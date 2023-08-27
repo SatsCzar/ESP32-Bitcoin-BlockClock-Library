@@ -34,5 +34,6 @@ String currencyStateToString(CurrencyState currency);
 String currencyStateToSymbol(CurrencyState currency);
 String intWithThousandSeparator(int number);
 String truncateString(String input);
+String replaceCommaWithDot(String str);
 
 #endif

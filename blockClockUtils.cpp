@@ -52,11 +52,19 @@ String intWithThousandSeparator(int number) {
   return result;
 }
 
-
 String truncateString(String input) {
   if (input.length() > 10) {
     input.remove(7);
     input.concat("...");
   }
   return input;
+}
+
+String replaceCommaWithDot(String str) {
+  for (int i = 0; i < str.length(); i++) {
+    if (str[i] == ',') {
+      str[i] = '.';
+    }
+  }
+  return str;
 }
